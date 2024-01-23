@@ -3,6 +3,7 @@ package kea.dpang.gateway.component;
 import kea.dpang.gateway.security.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +42,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
 
             String authorizationHeader = headers.get(HttpHeaders.AUTHORIZATION).get(0);
+            String refreshTokenHeader = headers.get("refreshToken").get(0);
 
             // JWT 토큰 판별
             String token = authorizationHeader.substring(7);
