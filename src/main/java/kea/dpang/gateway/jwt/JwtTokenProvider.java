@@ -1,13 +1,11 @@
-package kea.dpang.gateway.security;
+package kea.dpang.gateway.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @Slf4j

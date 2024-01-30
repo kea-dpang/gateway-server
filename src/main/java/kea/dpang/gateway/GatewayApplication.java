@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class GatewayApplication {
 
     public static void main(String[] args) {
