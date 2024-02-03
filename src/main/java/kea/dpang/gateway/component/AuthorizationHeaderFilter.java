@@ -3,11 +3,14 @@ package kea.dpang.gateway.component;
 import io.jsonwebtoken.*;
 import kea.dpang.gateway.Roles;
 import kea.dpang.gateway.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -16,19 +19,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Base64;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider) {
-        super(Config.class);
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     public static class Config {
 
