@@ -19,10 +19,13 @@ public class JwtTokenProvider {
     private byte[] key;
 
     private Claims getClaimsFromJwtToken(String token) {
+        log.info("Test: SECRET: {}",SECRET);
         this.key = Base64.getDecoder().decode(SECRET);
+        log.info("Test: key: {}",key);
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
+            log.error("Jwt Body 파싱 에러: ",e);
             return e.getClaims();
         }
     }
