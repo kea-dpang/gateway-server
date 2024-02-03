@@ -71,8 +71,8 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
 
             ServerHttpRequest newRequest = request.mutate()
-                    .header("client-id", userId)
-                    .header("role", String.join(",",roles))
+                    .header("X-DPANG-client-id", userId)
+                    .header("X-DPANG-role", String.join(",",roles))
                     .build();
             log.info("Request에 header 추가: client-id -> {}, role -> {}", userId, roles);
 
