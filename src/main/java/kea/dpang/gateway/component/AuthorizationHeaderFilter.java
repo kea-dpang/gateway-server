@@ -23,11 +23,16 @@ import java.util.Base64;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider){
+        super(Config.class);
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     public static class Config {
 
