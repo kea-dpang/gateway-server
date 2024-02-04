@@ -40,8 +40,8 @@ public class JwtTokenProvider implements InitializingBean {
         }
     }
 
-    public String getUserId(String token) {
-        return getClaimsFromJwtToken(token).get("client-id",String.class);
+    public Long getUserId(String token) {
+        return getClaimsFromJwtToken(token).get("client-id",Long.class);
     }
 
     public List<String> getRoles(String token) {
