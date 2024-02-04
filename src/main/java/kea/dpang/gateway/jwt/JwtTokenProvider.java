@@ -51,12 +51,22 @@ public class JwtTokenProvider implements InitializingBean {
     public void validateJwtToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        }
-        catch (SignatureException  | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException | ExpiredJwtException
-                jwtException
-        ) {
-            log.error("JWT 파싱 에러: ",jwtException);
-            throw jwtException;
+        } catch (SignatureException e)
+        {
+            log.error("JWT 서명 검증 에러: ",e);
+            throw e;
+        } catch (MalformedJwtException e){
+            log.error("JWT 형식 에러: ",e);
+            throw e;
+        } catch (UnsupportedJwtException e){
+            log.error("JWT 미지원 형식 에러: ",e);
+            throw e;
+        } catch (IllegalArgumentException e){
+            log.error("JWT 인수값 에러: ");
+            throw e;
+        } catch (ExpiredJwtException e){
+            log.error("JWT 만료 에러: ");
+            throw e;
         }
     }
 }
