@@ -66,7 +66,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             Long userId = jwtTokenProvider.getUserId(token);
             log.info("사용자 식별자: userId -> {}",userId);
-            List<String> roles = jwtTokenProvider.getRoles(token);
+            String roles = jwtTokenProvider.getRoles(token);
             log.info("사용자 권한: roles -> {}",roles);
 
             if (!roles.contains(Roles.ADMIN.toString())) {
@@ -76,7 +76,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             ServerHttpRequest newRequest = request.mutate()
                     .header("X-DPANG-CLIENT-ID", String.valueOf(userId))
-                    .header("X-DPANG-ROLE", String.join(",",roles))
+                    .header("X-DPANG-ROLE", roles)
                     .build();
             log.info("Request에 header 추가: client-id -> {}, role -> {}", userId, roles);
 
