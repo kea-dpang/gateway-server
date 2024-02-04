@@ -76,9 +76,9 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             ServerHttpRequest newRequest = request.mutate()
                     .header("X-DPANG-CLIENT-ID", String.valueOf(userId))
-                    .header("X-DPANG-ROLE", roles)
+                    .header("X-DPANG-CLIENT-ROLE", roles)
                     .build();
-            log.info("Request에 header 추가: client-id -> {}, role -> {}", userId, roles);
+            log.info("Request에 header 추가: X-DPANG-CLIENT-ID -> {}, X-DPANG-CLIENT-ROLE -> {}", userId, roles);
 
             log.info("AuthorizationHeaderFilter 종료: newRequest -> {}",newRequest.getHeaders());
             return chain.filter(exchange.mutate().request(newRequest).build());
