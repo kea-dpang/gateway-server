@@ -44,8 +44,8 @@ public class JwtTokenProvider implements InitializingBean {
         return getClaimsFromJwtToken(token).get("client-id",Long.class);
     }
 
-    public List<String> getRoles(String token) {
-        return (List<String>) getClaimsFromJwtToken(token).get("role");
+    public String getRoles(String token) {
+        return getClaimsFromJwtToken(token).get("role",String.class);
     }
 
     public void validateJwtToken(String token) {
