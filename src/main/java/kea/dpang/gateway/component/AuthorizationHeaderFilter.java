@@ -63,7 +63,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
 
 
-            if (!roles.contains(Roles.USER.toString()) || !roles.contains(Roles.ADMIN.toString()) || !roles.contains(Roles.SUPER_ADMIN.toString())) {
+            if (!roles.contains(Roles.USER.toString()) && !roles.contains(Roles.ADMIN.toString()) && !roles.contains(Roles.SUPER_ADMIN.toString())) {
                 log.error("사용자 권한 없음: 사용자 권한 -> {}",roles);
                 return onError(exchange, "권한 없음", HttpStatus.FORBIDDEN);
             }
