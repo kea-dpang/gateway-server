@@ -1,16 +1,11 @@
 package kea.dpang.gateway.component;
 
-import io.jsonwebtoken.*;
 import kea.dpang.gateway.Roles;
 import kea.dpang.gateway.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -19,17 +14,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Base64;
-import java.util.List;
-
 @Component
 @Slf4j
-public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
+public class AdminAuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AdminAuthorizationHeaderFilter.Config> {
 
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider){
+    public AdminAuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider){
         super(Config.class);
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -42,7 +34,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
-            log.info("AuthorizationHeaderFilter 시작: request -> {}", exchange.getRequest());
+            log.info("AdminAuthorizationHeaderFilter 시작: request -> {}", exchange.getRequest());
 
             HttpHeaders headers = request.getHeaders();
             if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
@@ -69,7 +61,9 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             String roles = jwtTokenProvider.getRoles(token);
             log.info("사용자 권한: roles -> {}",roles);
 
-            if (!roles.contains(Roles.ADMIN.toString())) {
+
+
+            if (!roles.contains(Roles.USER.toString()) || !roles.contains(Roles.ADMIN.toString()) || !roles.contains(Roles.SUPER_ADMIN.toString())) {
                 log.error("사용자 권한 없음: 사용자 권한 -> {}",roles);
                 return onError(exchange, "권한 없음", HttpStatus.FORBIDDEN);
             }
@@ -80,7 +74,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                     .build();
             log.info("Request에 header 추가: X-DPANG-CLIENT-ID -> {}, X-DPANG-CLIENT-ROLE -> {}", userId, roles);
 
-            log.info("AuthorizationHeaderFilter 종료: newRequest -> {}",newRequest.getHeaders());
+            log.info("AdminAuthorizationHeaderFilter 종료: newRequest -> {}",newRequest.getHeaders());
             return chain.filter(exchange.mutate().request(newRequest).build());
         };
     }
