@@ -16,12 +16,12 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
-public class AdminAuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AdminAuthorizationHeaderFilter.Config> {
+public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public AdminAuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider){
+    public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider){
         super(Config.class);
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -34,7 +34,7 @@ public class AdminAuthorizationHeaderFilter extends AbstractGatewayFilterFactory
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
-            log.info("AdminAuthorizationHeaderFilter 시작: request -> {}", exchange.getRequest());
+            log.info("AuthorizationHeaderFilter 시작: request -> {}", exchange.getRequest());
 
             HttpHeaders headers = request.getHeaders();
             if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
@@ -74,7 +74,7 @@ public class AdminAuthorizationHeaderFilter extends AbstractGatewayFilterFactory
                     .build();
             log.info("Request에 header 추가: X-DPANG-CLIENT-ID -> {}, X-DPANG-CLIENT-ROLE -> {}", userId, roles);
 
-            log.info("AdminAuthorizationHeaderFilter 종료: newRequest -> {}",newRequest.getHeaders());
+            log.info("AuthorizationHeaderFilter 종료: newRequest -> {}",newRequest.getHeaders());
             return chain.filter(exchange.mutate().request(newRequest).build());
         };
     }
