@@ -1,5 +1,6 @@
 package kea.dpang.gateway.component;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import kea.dpang.gateway.Roles;
 import kea.dpang.gateway.jwt.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +54,12 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                 return onError(exchange, "Bearer is missing", HttpStatus.UNAUTHORIZED);
             }
 
-            jwtTokenProvider.validateJwtToken(token);
-            log.info("토큰 유효성 통과 : Token -> {}",token);
-
+            try {
+                jwtTokenProvider.validateJwtToken(token);
+                log.info("토큰 유효성 통과 : Token -> {}", token);
+            } catch (ExpiredJwtException e){
+                return onError(exchange,"access token 만료", HttpStatus.UNAUTHORIZED);
+            }
             Long userId = jwtTokenProvider.getUserId(token);
             log.info("사용자 식별자: userId -> {}",userId);
             String roles = jwtTokenProvider.getRoles(token);
