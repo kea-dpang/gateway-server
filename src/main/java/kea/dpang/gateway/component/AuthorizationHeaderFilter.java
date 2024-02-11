@@ -39,10 +39,10 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             HttpHeaders headers = request.getHeaders();
 
-            if(headers.containsKey("X-DPANG-SERVICE-NAME")){
-                log.info("{}에서 보내는 API 요청",headers.getFirst("X-DPANG-SERVICE-NAME"));
-                return chain.filter(exchange.mutate().request(request).build());
-            }
+//            if(headers.containsKey("X-DPANG-SERVICE-NAME")){
+//                log.info("{}에서 보내는 API 요청",headers.getFirst("X-DPANG-SERVICE-NAME"));
+//                return chain.filter(exchange.mutate().request(request).build());
+//            }
 
             if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
                 log.error("헤더에 Authorization이 포함되어 있지 않습니다. ");
